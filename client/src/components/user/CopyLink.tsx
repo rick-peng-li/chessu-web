@@ -3,17 +3,13 @@
 import { IconCopy } from "@tabler/icons-react";
 import { useState } from "react";
 
+import { copyToClipboard } from "@/utils/clipboard";
+
 export default function CopyLink({ name }: { name: string }) {
   const [copiedLink, setCopiedLink] = useState(false);
 
   function copyLink() {
-    const text = `https://ches.su/user/${name}`;
-
-    if ("clipboard" in navigator) {
-      navigator.clipboard.writeText(text);
-    } else {
-      document.execCommand("copy", true, text);
-    }
+    copyToClipboard(`https://ches.su/user/${name}`);
     setCopiedLink(true);
     setTimeout(() => {
       setCopiedLink(false);

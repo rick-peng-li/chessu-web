@@ -45,6 +45,21 @@ export const getGames = async (req: Request, res: Response) => {
     }
 };
 
+export const getGameHistory = async (req: Request, res: Response) => {
+    try {
+        const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
+        const games = await GameModel.findRecent(limit);
+        if (!games) {
+            res.status(500).end();
+            return;
+        }
+        res.status(200).json(games);
+    } catch (err: unknown) {
+        console.log(err);
+        res.status(500).end();
+    }
+};
+
 export const getActiveGame = async (req: Request, res: Response) => {
     try {
         if (!req.params || !req.params.code) {

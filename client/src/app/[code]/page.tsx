@@ -1,12 +1,13 @@
-import GameAuthWrapper from "@/components/game/GameAuthWrapper";
-import { fetchActiveGame } from "@/lib/game";
-import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 
-export async function generateMetadata({ params }: { params: { code: string } }) {
+import GameRoute from "@/pages/game/GameRoute";
+import { fetchActiveGame } from "@/lib/game";
+
+export async function generateMetadata({ params }: { params: { code: string } }): Promise<Metadata> {
   const game = await fetchActiveGame(params.code);
   if (!game) {
     return {
-      description: "Game not found",
+      title: "Game not found | chessu",
       robots: {
         index: false,
         follow: false,
@@ -16,6 +17,7 @@ export async function generateMetadata({ params }: { params: { code: string } })
     };
   }
   return {
+    title: "chessu",
     description: `Play or watch a game with ${game.host?.name}`,
     openGraph: {
       title: "chessu",
@@ -35,10 +37,5 @@ export async function generateMetadata({ params }: { params: { code: string } })
 }
 
 export default async function Game({ params }: { params: { code: string } }) {
-  const game = await fetchActiveGame(params.code);
-  if (!game) {
-    notFound();
-  }
-
-  return <GameAuthWrapper initialLobby={game} />;
+  return <GameRoute code={params.code} />;
 }

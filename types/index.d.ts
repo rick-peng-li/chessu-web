@@ -26,3 +26,26 @@ export interface User {
     connected?: boolean;
     disconnectedOn?: number;
 }
+
+// user with computed game count, used by the leaderboard
+export interface PlayerStats extends User {
+    games?: number;
+}
+
+// aggregated platform statistics
+export interface PlatformStats {
+    users: number;
+    games: number;
+    activeGames: number;
+    whiteWins: number;
+    blackWins: number;
+    draws: number;
+}
+
+// user currently connected to an active game
+export interface OnlineUser {
+    id?: number | string;
+    name?: string | null;
+    role: "white" | "black" | "observer";
+    gameCode?: string;
+}

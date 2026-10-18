@@ -4,7 +4,6 @@ import type { ReactNode } from "react";
 
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
-import AuthModal from "@/components/auth/AuthModal";
 
 import ContextProvider from "@/context/ContextProvider";
 
@@ -46,8 +45,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <main className="mx-1 flex min-h-[70vh] justify-center md:mx-16 lg:mx-40">
             {children}
           </main>
-
-          <AuthModal />
         </ContextProvider>
 
         <Footer />

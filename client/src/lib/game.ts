@@ -48,6 +48,20 @@ export const fetchPublicGames = async () => {
     }
 };
 
+export const fetchFinishedGames = async (limit = 20): Promise<Game[] | undefined> => {
+    try {
+        const res = await fetch(`${API_URL}/v1/games/history?limit=${limit}`, {
+            cache: "no-store"
+        });
+        if (res && res.status === 200) {
+            const games: Game[] = await res.json();
+            return games;
+        }
+    } catch (err) {
+        console.error(err);
+    }
+};
+
 export const fetchArchivedGame = async ({ id, userid }: { id?: number; userid?: number }) => {
     let url = `${API_URL}/v1/games?`;
     if (id) {

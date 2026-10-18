@@ -1,5 +1,9 @@
-import { IconExternalLink, IconUser } from "@tabler/icons-react";
+import { IconChevronDown } from "@tabler/icons-react";
 import Link from "next/link";
+
+import NavLink from "@/router/NavLink";
+import { MORE_NAV, PRIMARY_NAV, ROUTES } from "@/router/routes";
+import UserMenu from "./auth/UserMenu";
 import ThemeToggle from "./ThemeToggle";
 
 export default function Header() {
@@ -7,7 +11,7 @@ export default function Header() {
     <header className="navbar border-base-300 dark:border-neutral mx-1 w-auto justify-center border-b-2 md:mx-16 lg:mx-40">
       <div className="flex flex-1 items-center gap-2">
         <Link
-          href="/"
+          href={ROUTES.HOME}
           className="btn btn-ghost no-animation p-0 text-2xl normal-case hover:bg-transparent"
         >
           <svg
@@ -22,24 +26,31 @@ export default function Header() {
           </svg>
           chessu
         </Link>
-        <a
-          title="Project roadmap"
-          className="badge badge-sm badge-secondary gap-0.5"
-          href="https://github.com/users/dotnize/projects/2"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          pre-alpha
-          <IconExternalLink size={12} />
-        </a>
+        <nav className="flex items-center gap-1">
+          {PRIMARY_NAV.map((item) => (
+            <NavLink key={item.href} item={item} className="btn btn-ghost btn-sm normal-case" />
+          ))}
+          <div className="dropdown dropdown-end">
+            <label tabIndex={0} className="btn btn-ghost btn-sm normal-case">
+              More
+              <IconChevronDown size={14} />
+            </label>
+            <ul
+              tabIndex={0}
+              className="dropdown-content menu bg-base-200 dark:bg-neutral rounded-box z-50 w-48 gap-1 p-2 shadow"
+            >
+              {MORE_NAV.map((item) => (
+                <li key={item.href}>
+                  <NavLink item={item} />
+                </li>
+              ))}
+            </ul>
+          </div>
+        </nav>
       </div>
       <div className="flex-none">
         <ThemeToggle />
-        <label tabIndex={0} htmlFor="auth-modal" className="btn btn-ghost btn-circle avatar">
-          <div className="w-10 rounded-full">
-            <IconUser className="m-auto block h-full" />
-          </div>
-        </label>
+        <UserMenu />
       </div>
     </header>
   );

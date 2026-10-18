@@ -1,4 +1,4 @@
-import type { User } from "@chessu/types";
+import type { PlayerStats, User } from "@chessu/types";
 import { db } from "../index.js";
 
 export const create = async (user: User, password: string) => {
@@ -12,6 +12,32 @@ export const create = async (user: User, password: string) => {
             [user.name, user.email || null, password]
         );
         return res.rows[0] as User;
+    } catch (err: unknown) {
+        console.log(err);
+        return null;
+    }
+};
+
+export const findAll = async (limit = 50): Promise<PlayerStats[] | null> => {
+    try {
+        const res = await db.query(
+            `SELECT id, name, wins, losses, draws, (wins + losses + draws) AS games
+             FROM "user"
+             ORDER BY wins DESC, games DESC, name ASC
+             LIMIT $1`,
+            [limit]
+        );
+        return res.rows as PlayerStats[];
+    } catch (err: unknown) {
+        console.log(err);
+        return null;
+    }
+};
+
+export const countAll = async (): Promise<number | null> => {
+    try {
+        const res = await db.query(`SELECT COUNT(*) AS count FROM "user"`);
+        return parseInt(res.rows[0].count);
     } catch (err: unknown) {
         console.log(err);
         return null;
@@ -104,6 +130,8 @@ export const remove = async (id: number) => {
 
 const UserModel = {
     create,
+    findAll,
+    countAll,
     findById,
     findByNameEmail,
     update,
